@@ -1,5 +1,5 @@
 [package]
-name = "minigrep"
+name = "fw"
 version = "0.1.0"
 authors = ["Callum Oakley <c.oakley108@gmail.com>"]
 

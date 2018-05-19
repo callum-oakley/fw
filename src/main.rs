@@ -1,22 +1,14 @@
-extern crate minigrep;
+extern crate fw;
 
 use std::env;
 use std::process;
 
-use minigrep::Config;
+use fw::Config;
 
 fn main() {
     let mut args = env::args();
     let prog_name = args.next().unwrap();
-    let config = Config::new(args).unwrap_or_else(|err| {
-        eprintln!(
-            "{}: problem parsing arguments: {}",
-            prog_name, err
-        );
-        process::exit(1);
-    });
-
-    if let Err(e) = minigrep::run(config) {
+    if let Err(e) = fw::run(Config::new(args)) {
         eprintln!("{}: application error: {}", prog_name, e);
         process::exit(1);
     }
