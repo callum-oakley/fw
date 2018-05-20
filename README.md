@@ -1,21 +1,41 @@
 # qw &ndash; query words
 
-## TODO
+`qw` is a *grep-ish* tool for filtering text with a simple query language.
+Unlike grep, queries are boolean expressions based on the occurances (or not)
+of given strings. `qw` is strictly less flexible than grep and friends but
+(hopefully) sometimes more convenient, since writing these kind of expressions
+using regular expressions sucks.
 
-- coloured matches
-- simple query language with keywords `|`, `!`, `(`, `)`, `'`, `"`
-- search files and output file names (like rg)
-- help text
-- proper readme
+## Examples
 
-## Query language sketch
+To find occurances of a literal string (wrap in quotes if your string contains
+spaces or any of `|!()'"`)
 
-    reserved = "|" | "!" | "(" | ")" | "'" | "\'"
+    qw foo
 
-    string = "<arbitrary text other than \">" | '<arbitrary text other than \'>'
+In `qw`, *and* is concatenation, so
 
-    expr = string | !expr | (expr expr) | (expr | expr)
+    qw 'foo bar'
 
-(concatenation is "and") With the usual associativity of and, `|`, and `!` (so
-that parens aren't always required), and the rule that quotes are optional when
-a string doesn't contain any reserved characters.
+matches any line containing both "foo" and "bar". (to match the literal string
+"foo bar", use `qw '"foo bar"'`)
+
+*or* is `|`, so
+
+    qw 'foo | bar'
+
+matches any line containing "foo" or "bar".
+
+    qw '!foo'
+
+matches any line *not* containing "foo".
+
+Finally, anywhere that you can put a string, you can also put a whole
+subexperssion, building arbitrarily complex queries. `!` takes precedence over
+` ` (and), which takes precedence over `|`, and `()` can be used for grouping
+in the usual way.
+
+    qw '!foo (bar | baz)'
+
+matches any line which doesn't contain "foo", but does contain either "bar" or
+"baz".
